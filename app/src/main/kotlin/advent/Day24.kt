@@ -63,26 +63,26 @@ What is the quantum entanglement of the first group of packages in the ideal con
 
     fun answer(): Long {
         val third = puzzleInput.sum() / 3
-        val g = split(puzzleInput, 0, third, 1, 0)
+        val g = knapsack(puzzleInput, 0, third, 1, 0)
         return g?.qe ?: throw RuntimeException("returned null")
     }
 
     fun answer2(): Long {
         val fourth = puzzleInput.sum() / 4
-        val g = split(puzzleInput, 0, fourth, 1, 0)
+        val g = knapsack(puzzleInput, 0, fourth, 1, 0)
         return g?.qe ?: throw RuntimeException("returned null")
     }
 
     data class Group(val qe: Long, val size: Int)
 
-    fun split(weights: List<Int>, pos: Int, remaining: Int, currQe: Long, currCt: Int): Group? {
+    fun knapsack(weights: List<Int>, pos: Int, remaining: Int, currQe: Long, currCt: Int): Group? {
         if (remaining == 0) {
             return Group(currQe, currCt)
         } else if (remaining < 0 || pos == weights.size) {
             return null
         }
-        val included = split(weights, pos + 1, remaining - weights[pos], currQe * weights[pos], currCt + 1)
-        val notIncluded = split(weights, pos + 1, remaining, currQe, currCt)
+        val included = knapsack(weights, pos + 1, remaining - weights[pos], currQe * weights[pos], currCt + 1)
+        val notIncluded = knapsack(weights, pos + 1, remaining, currQe, currCt)
         if (included == null) return notIncluded
         if (notIncluded == null) return included
         if (included.size < notIncluded.size) return included
@@ -91,5 +91,14 @@ What is the quantum entanglement of the first group of packages in the ideal con
         if (included.qe < notIncluded.qe) return included
         else return notIncluded
     }
+
+    // cheats because it doesn't check to see if remaining weights make valid groups
+//
+//    data class Sack(val qe: Long, val size: Int, val weight: Int)
+//
+//    fun knapsack2(weights: List<Int>, targetWeight: Int, idx: Int, curr: Sack): Sack {
+//        if (curr.weight == targetWeight) return curr
+//        if (idx == weights.size)
+//    }
 
 }

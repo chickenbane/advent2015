@@ -12,7 +12,7 @@ class Day24Test {
     fun example() {
         val exampleNums = listOf(11, 9, 10, 8, 2, 7, 5, 4, 3, 1)
         val third = exampleNums.sum() / 3
-        val g = Day24.split(exampleNums, 0, third, 1, 0)
+        val g = Day24.knapsack(exampleNums, 0, third, 1, 0)
         if (g == null) {
             Assert.fail("returned null")
         } else {
